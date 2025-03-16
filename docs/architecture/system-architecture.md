@@ -1,198 +1,145 @@
-# Frame Guru E-commerce & POS System Architecture
+# Frame Guru Complete System Architecture
+
+This document outlines the complete architecture for The Frame Guru's integrated business system, combining e-commerce, point-of-sale (POS), 3D visualization, order tracking, and customer interaction capabilities.
 
 ## System Overview
 
-This document outlines the architecture for The Frame Guru's integrated e-commerce and point-of-sale (POS) system, featuring 3D product visualization, order tracking, and a customer notification system with chatbot integration.
+The Frame Guru system is built with a modern, scalable microservices architecture that seamlessly connects in-store and online operations. The system provides a unified experience for customers while giving staff efficient tools for production and order management.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│                    CUSTOMER FACING SYSTEMS                  │
-│                                                             │
-│  ┌─────────────┐   ┌─────────────┐    ┌─────────────────┐  │
-│  │             │   │             │    │                 │  │
-│  │  Website    │   │  Mobile     │    │  In-Store POS   │  │
-│  │  Interface  │   │  App        │    │  Terminal       │  │
-│  │             │   │             │    │                 │  │
-│  └──────┬──────┘   └──────┬──────┘    └────────┬────────┘  │
-│         │                 │                     │           │
-└─────────┼─────────────────┼─────────────────────┼───────────┘
-          │                 │                     │
-          │                 │                     │
-┌─────────┼─────────────────┼─────────────────────┼───────────┐
-│         │                 │                     │           │
-│         │                 │                     │           │
-│         │                 │                     │           │
-│  ┌──────▼──────────────────▼─────────────────────▼────────┐ │
-│  │                                                         │ │
-│  │                UNIFIED API GATEWAY                      │ │
-│  │                                                         │ │
-│  └─────────────────────────┬─────────────────────────────┬┘ │
-│                            │                             │  │
-│                            │                             │  │
-│  ┌──────────────────┐      │     ┌────────────────────┐  │  │
-│  │                  │      │     │                    │  │  │
-│  │  Authentication  ◄──────┘     │   Product Catalog  │  │  │
-│  │  & User Mgmt     │            │   & Inventory      │  │  │
-│  │                  │            │                    │  │  │
-│  └──────────────────┘            └─────────┬──────────┘  │  │
-│                                            │             │  │
-│                                            │             │  │
-│  ┌──────────────────┐            ┌─────────▼──────────┐  │  │
-│  │                  │            │                    │  │  │
-│  │  3D Rendering    │            │   Order            │  │  │
-│  │  Engine          │◄───────────►   Management      ◄───┘  │
-│  │                  │            │                    │     │
-│  └──────────────────┘            └─────────┬──────────┘     │
-│                                            │                │
-│                                            │                │
-│  ┌──────────────────┐            ┌─────────▼──────────┐     │
-│  │                  │            │                    │     │
-│  │  Payment         │◄───────────►   Notification     │     │
-│  │  Processing      │            │   System           │     │
-│  │                  │            │                    │     │
-│  └──────────────────┘            └─────────┬──────────┘     │
-│                                            │                │
-│                                            │                │
-│  ┌──────────────────┐            ┌─────────▼──────────┐     │
-│  │                  │            │                    │     │
-│  │  Analytics &     │◄───────────►   AI Chatbot       │     │
-│  │  Reporting       │            │   Service          │     │
-│  │                  │            │                    │     │
-│  └──────────────────┘            └────────────────────┘     │
-│                                                             │
-│                     CORE SERVICES                           │
-└─────────────────────────────────────────────────────────────┘
-```
+## Core Components
 
-## Key Components
+### 1. Frontend Systems
 
-### 1. Product Catalog
+#### Website & E-commerce
+- **Technologies**: React.js, Next.js, Tailwind CSS
+- **Features**:
+  - Product catalog with standardized frame options
+  - 3D frame visualization with mat color selection
+  - Artwork upload and preview capabilities
+  - User account management
+  - Shopping cart and checkout
+  - Order tracking
 
-#### Standard Frame Offerings
-- **Just a Frame**: Basic frame options in standard sizes
-- **Frame and Mat**: Frame with mat board options
-- **Shadowbox**: Float mount shadowbox frames
+#### Mobile Responsive Design
+- Progressive Web App (PWA) capabilities
+- Touch-friendly interface for in-store kiosks
 
-#### Size Options
-- 8×10"
-- 11×14"
-- 16×20"
-- 18×24"
-- 20×30"
-- 24×36"
+#### Point of Sale (POS) Integration
+- Square POS integration for in-store transactions
+- Shared inventory and customer database with online store
+- Custom order entry system for in-person consultations
 
-#### Custom Framing Tiers
-1. **Tier 1 - Basic Custom**: Custom sizes with standard materials and techniques
-2. **Tier 2 - Premium Custom**: Advanced materials, complex designs, and specialty glass
-3. **Tier 3 - Museum/Conservation**: Archival materials, object mounting, and museum-grade conservation
+### 2. Backend Services
 
-### 2. 3D Visualization System
+#### API Gateway
+- **Technologies**: Express.js, Node.js
+- Central entry point for all client applications
+- Authentication and request routing
+- Rate limiting and security features
 
-The system uses Three.js for web-based 3D rendering, allowing customers to:
-- View realistic 3D renders of frame options
-- Select mat colors from a curated palette
-- Upload their own artwork to visualize in the selected frame
-- Rotate and zoom to see details from different angles
-- Save configurations for later or sharing
+#### User & Authentication Service
+- Customer account management
+- Staff account management with role-based permissions
+- OAuth2 integration with social login options
+- JWT token management
 
-### 3. Order Management
+#### Product Catalog Service
+- Standard frame product management
+- Custom framing tier configuration
+- Pricing calculation engine
+- Inventory tracking
 
-- Unified order system for online and in-store purchases
-- Real-time inventory management
-- Order status tracking with defined stages:
-  - Order Received
-  - Payment Confirmed
-  - In Production
-  - Quality Check
-  - Ready for Pickup/Shipped
-  - Delivered/Completed
+#### 3D Visualization Engine
+- **Technologies**: Three.js (for web), WebGL
+- Frame style and material rendering
+- Mat color selection visualization
+- Artwork upload and preview generation
+- Frame configuration state management
 
-### 4. Customer Notification System
+#### Order Management System
+- Order creation and processing
+- Status tracking and updates
+- Production workflow management
+- Custom order specifications
+- Estimated completion date calculation
 
-Automated notifications via:
-- Email
-- SMS (optional)
-- In-app notifications (when using mobile app)
+#### Payment Processing
+- Integration with Stripe for online payments
+- Integration with Square for in-store POS
+- Secure payment handling and PCI compliance
+- Invoice generation for custom orders
 
-Notification triggers:
-- Order confirmation
-- Payment processing
-- Status changes
-- Shipping/tracking updates
-- Ready for pickup alerts
-- Post-purchase follow-up
+#### Notification Service
+- Email notifications for order updates
+- SMS notifications (optional opt-in)
+- Push notifications for mobile users
+- Scheduled follow-up communications
 
-### 5. AI Chatbot Integration
-
+#### AI Chatbot Service
+- **Technologies**: Dialogflow, Node.js
 - Order status inquiries
 - Product information assistance
-- Framing recommendations
-- Appointment scheduling
-- FAQs about materials and techniques
-- Connects to live agent when needed
+- Basic custom framing consultations
+- Handoff to human agents when needed
 
-### 6. POS Integration
+### 3. Database & Storage
 
-- Seamless integration with Square POS for in-store sales
-- Shared inventory between online and physical store
-- Customer profiles accessible from both systems
-- Unified reporting and analytics
+#### Primary Database
+- **Technology**: MongoDB
+- Document-based storage for flexible schema
+- Collections:
+  - Customers
+  - Products
+  - Orders
+  - Framing Tiers
+  - Notifications
+  - Chat Sessions
 
-## Technology Stack
+#### Caching Layer
+- **Technology**: Redis
+- Session management
+- Frequent queries caching
+- Rate limiting support
 
-### Frontend
-- React.js for web interface
-- Three.js for 3D visualization
-- Progressive Web App (PWA) capabilities for mobile
-- Tailwind CSS for styling
+#### File Storage
+- **Technology**: AWS S3
+- Customer artwork storage
+- Product images
+- 3D model files
+- Generated frame previews
 
-### Backend
-- Node.js with Express
-- MongoDB for primary database
-- Redis for caching and session management
-- AWS S3 for image storage
+### 4. Supporting Services
 
-### Integration & Services
-- Payment: Stripe and Square
-- Notifications: Twilio (SMS) and SendGrid (Email)
-- Chatbot: Dialogflow with custom Node.js integration
-- Authentication: Auth0
-- Analytics: Google Analytics and custom reporting
+#### Analytics & Reporting
+- Sales performance tracking
+- Inventory management reports
+- Customer behavior analysis
+- Production efficiency metrics
 
-### Deployment
-- AWS for cloud infrastructure
-- Docker for containerization
-- CI/CD pipeline using GitHub Actions
+#### Search Engine
+- Product search functionality
+- Order search for admins
+- Elasticsearch for fast, flexible searching
 
-## Implementation Phases
+#### Content Management
+- Blog posts and educational content
+- Framing tips and guidelines
+- Event announcements
 
-### Phase 1: Core E-commerce System
-- Product catalog and basic online ordering
-- Payment processing integration
-- Admin dashboard for order management
+## System Architecture Diagram
 
-### Phase 2: 3D Visualization
-- Three.js integration
-- 3D model creation for frame styles
-- Mat color selector implementation
-- Artwork upload and visualization
-
-### Phase 3: Order Tracking & Notifications
-- Order status tracking system
-- Email notification system
-- SMS integration
-
-### Phase 4: Chatbot & Advanced Features
-- AI chatbot implementation
-- POS integration
-- Mobile app development
-- Analytics and reporting
-
-## Security Considerations
-
-- PCI DSS compliance for payment processing
-- GDPR/CCPA compliant customer data handling
-- Regular security audits and penetration testing
-- Encrypted data storage and transmission
-- Role-based access control for administrative functions
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                           CLIENT APPLICATIONS                             │
+│                                                                          │
+│  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   │
+│  │             │   │             │   │             │   │             │   │
+│  │  Website    │   │  Mobile     │   │  In-Store   │   │  Admin      │   │
+│  │  (React)    │   │  PWA        │   │  POS/Kiosk  │   │  Dashboard  │   │
+│  │             │   │             │   │             │   │             │   │
+│  └──────┬──────┘   └──────┬──────┘   └──────┬──────┘   └──────┬──────┘   │
+│         │                 │                 │                 │          │
+└─────────┼─────────────────┼─────────────────┼─────────────────┼──────────┘
+          │                 │                 │                 │
+          │                 │                 │                 │
+┌
